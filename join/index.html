@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Join a group on Expense Tracker</title>
+<body style="font-family:system-ui,sans-serif;max-width:420px;margin:40px auto;padding:0 18px;line-height:1.5">
+<h2>Join a group on Expense Tracker</h2>
+<p>Invite code: <b id="c" style="letter-spacing:2px"></b></p>
+<p><a id="o" style="display:block;text-align:center;padding:14px;border-radius:12px;background:#0f766e;color:#fff;text-decoration:none;font-weight:700">Open in the app</a></p>
+<p style="color:#555;font-size:14px">If nothing happens, open Expense Tracker, go to Shared expenses, then Groups, then Join a group, and enter the code above. You need to be signed in to the app.</p>
+<script>
+const code=(new URLSearchParams(location.search).get("code")||"").replace(/[^A-Za-z0-9]/g,"");
+document.getElementById("c").textContent=code||"(missing)";
+const link="expensetracker://join?code="+code;document.getElementById("o").href=link;
+if(code)setTimeout(()=>{location.href=link},300);
+</script>
