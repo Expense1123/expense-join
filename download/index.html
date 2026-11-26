@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Download Expense Tracker</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f8f6f0;color:#29303a;margin:0;padding:24px 18px;line-height:1.5}
+main{max-width:440px;margin:0 auto}.card{background:#fff;border:1px solid #e6e2d6;border-radius:18px;padding:20px}
+h1{font-size:22px;margin:0 0 8px}a.btn{display:block;text-align:center;border-radius:12px;padding:15px;margin-top:14px;font-weight:700;background:#d9ae4b;color:#2e2208;text-decoration:none}
+ol{padding-left:20px}.mu{color:#5d6975;font-size:14px}
+</style></head><body><main><div class="card">
+<h1>Expense Tracker for Android</h1>
+<div class="mu" id="v"></div>
+<a class="btn" id="dl" href="#">Download the app</a>
+<ol><li>Open the downloaded file.</li><li>If Android asks, allow installs from your browser, then tap Install.</li><li>If Play Protect warns you, tap More details, then Install anyway.</li></ol>
+<div class="mu">The app is shared directly and is not on the Play Store.</div>
+</div>
+<script>
+/* ONE PLACE TO EDIT FOR EACH NEW VERSION: the address of the APK in Supabase Storage (bucket "releases"). */
+const APP_VERSION="2.3";
+const APK_URL="https://qxknczqwtafbmjkupqht.supabase.co/storage/v1/object/public/releases/expense-tracker-2.3.apk";
+document.getElementById("v").textContent="Version "+APP_VERSION;
+document.getElementById("dl").href=APK_URL;
+/* the invite page and the in-app update button open this page with ?go=1 to start the download straight away */
+if(location.search.indexOf("go=1")>-1)location.replace(APK_URL);
+</script></main></body></html>
