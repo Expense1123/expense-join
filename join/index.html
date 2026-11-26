@@ -1,14 +1,47 @@
 <!doctype html>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Join a group on Expense Tracker</title>
-<body style="font-family:system-ui,sans-serif;max-width:420px;margin:40px auto;padding:0 18px;line-height:1.5">
-<h2>Join a group on Expense Tracker</h2>
-<p>Invite code: <b id="c" style="letter-spacing:2px"></b></p>
-<p><a id="o" style="display:block;text-align:center;padding:14px;border-radius:12px;background:#0f766e;color:#fff;text-decoration:none;font-weight:700">Open in the app</a></p>
-<p style="color:#555;font-size:14px">If nothing happens, open Expense Tracker, go to Shared expenses, then Groups, then Join a group, and enter the code above. You need to be signed in to the app.</p>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f8f6f0;color:#29303a;margin:0;padding:24px 18px;line-height:1.5}
+main{max-width:440px;margin:0 auto}
+.card{background:#fff;border:1px solid #e6e2d6;border-radius:18px;padding:20px;margin-bottom:14px}
+h1{font-size:22px;margin:0 0 6px}.code{font-size:26px;font-weight:800;letter-spacing:3px;margin:6px 0}
+a.btn,button.btn{display:block;width:100%;box-sizing:border-box;text-align:center;border:0;border-radius:12px;padding:15px;margin-top:12px;font:inherit;font-weight:700;background:#d9ae4b;color:#2e2208;text-decoration:none;cursor:pointer}
+a.sec,button.sec{background:#f5ebd0;color:#7a5610}.mu{color:#5d6975;font-size:14px}.hide{display:none}
+ol{padding-left:20px;margin:8px 0}
+</style></head><body><main>
+<div class="card">
+  <h1>You are invited to a group</h1>
+  <div class="mu">Invite code</div><div class="code" id="c"></div>
+  <a class="btn" id="open">Open in Expense Tracker</a>
+  <div class="mu" id="trying" style="margin-top:10px">Opening the app…</div>
+</div>
+<div class="card hide" id="install">
+  <h1>App not installed?</h1>
+  <div class="mu">Install it once. Your invite is remembered and the app will offer to join the group the first time you open it.</div>
+  <button class="btn" id="dl">Download the app</button>
+  <ol class="mu">
+    <li>Tap <b>Download the app</b> and open the file when it finishes.</li>
+    <li>If Android asks, allow installs from your browser, then tap <b>Install</b>.</li>
+    <li>Open Expense Tracker and sign in. The group invite appears.</li>
+  </ol>
+  <div class="mu">If the invite does not appear, open the app, go to Shared expenses, then Groups, then Join a group, and type the code above.</div>
+</div>
 <script>
-const code=(new URLSearchParams(location.search).get("code")||"").replace(/[^A-Za-z0-9]/g,"");
+const code=(new URLSearchParams(location.search).get("code")||"").replace(/[^A-Za-z0-9]/g,"").toUpperCase();
+const link="expensetracker://join?code="+code;
 document.getElementById("c").textContent=code||"(missing)";
-const link="expensetracker://join?code="+code;document.getElementById("o").href=link;
-if(code)setTimeout(()=>{location.href=link},300);
-</script>
+document.getElementById("open").href=link;
+let opened=false;
+const mark=()=>{opened=true};
+document.addEventListener("visibilitychange",()=>{if(document.hidden)mark()});addEventListener("pagehide",mark);addEventListener("blur",mark);
+if(code){setTimeout(()=>{location.href=link},300)}
+/* if the page is still in front after a moment, the app is probably not installed */
+setTimeout(()=>{if(!opened||!code){document.getElementById("install").classList.remove("hide");document.getElementById("trying").textContent="If the app did not open, install it below."}},2200);
+document.getElementById("dl").onclick=async()=>{
+  /* leave the invite on the clipboard so the app can pick it up after the install */
+  const t="expensetracker-join:"+code;
+  try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(x){}a.remove()}
+  location.href="../download/?go=1";   /* the download page holds the real file address */
+};
+</script></main></body></html>
